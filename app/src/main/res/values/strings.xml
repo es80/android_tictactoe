@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">TicTacToe</string>
+    <string name="one_player">One Player</string>
+    <string name="two_player">Two Players</string>
+    <string name="easy">Easy</string>
+    <string name="tricky">Tricky</string>
+    <string name="impossible">Impossible</string>
+    <string name="main_menu">Main Menu</string>
+    <string name="new_game">New Game</string>
+    <string name="win_naughts">Naughts has won!</string>
+    <string name="win_crosses">Crosses has won!</string>
+    <string name="drawn">Game drawn.</string>
+    <string name="computer_turn">Computer\'s turn.</string>
+    <string name="user_turn">Your turn.</string>
+    <string name="turn">"It's %1$s' turn."</string>
+    <string name="win">W:</string>
+    <string name="draw">D:</string>
+    <string name="loss">L:</string>
+    <string name="logo">Code Up Leeds Logo</string>
+    <string name="row1_col1">Row 1 Column 1</string>
+    <string name="row1_col2">Row 1 Column 2</string>
+    <string name="row1_col3">Row 1 Column 3</string>
+    <string name="row2_col1">Row 2 Column 1</string>
+    <string name="row2_col2">Row 2 Column 2</string>
+    <string name="row2_col3">Row 2 Column 3</string>
+    <string name="row3_col1">Row 3 Column 1</string>
+    <string name="row3_col2">Row 3 Column 2</string>
+    <string name="row3_col3">Row 3 Column 3</string>
+</resources>

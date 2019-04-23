@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#61C6F4</color>
+    <color name="colorPrimaryDark">#34A5DA</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="appBackground">#E1FFFF</color>
+    <color name="infinityWorksOrange">#E35205</color>
+    <color name="northCodersRed">#BA1F31</color>
+    <color name="white">#FFFFFF</color>
+</resources>
