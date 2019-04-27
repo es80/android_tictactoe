@@ -7,12 +7,17 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.play_activity.*
+import kotlinx.coroutines.*
 
-class PlayActivity : AppCompatActivity() {
+class PlayActivity : AppCompatActivity(), CoroutineScope by CoroutineScope(Dispatchers.Default) {
 
     private val state = AppState()
 
+    // Switch for two player or single player mode.
     private var singlePlayer: Boolean = false
+
+    // Used to bypass calls to tileClicked when computer is making its move.
+    private var computerMoving = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,30 +47,35 @@ class PlayActivity : AppCompatActivity() {
 
         // Set variables for single player mode.
         singlePlayer = intent.getBooleanExtra("singlePlayer", false)
-        state.setComputerPlayer(singlePlayer)
-        state.difficulty = when (intent.getStringExtra("difficulty")) {
-            "easy" -> Difficulty.Easy
-            "tricky" -> Difficulty.Tricky
-            else -> Difficulty.Impossible
-        }
-        // If the current player is the computer we must make the first move.
-        if (state.currentPlayer == state.computerPlayer) {
-            state.makeComputerMove()
+        if (singlePlayer) {
+
+            state.setComputerPlayer(singlePlayer)
+            state.difficulty = when (intent.getStringExtra("difficulty")) {
+                "easy" -> Difficulty.Easy
+                "tricky" -> Difficulty.Tricky
+                else -> Difficulty.Impossible
+            }
         }
 
         invalidate()
+
+        // If the computer goes first make its move.
+        computerMove()
     }
 
     private fun tileClicked(row: Int, col: Int) {
 
-        state.tileClicked(row, col)
-
-        // If playing the computer, make its move too.
-        if (state.currentlyPlaying && state.currentPlayer == state.computerPlayer) {
-            state.makeComputerMove()
+        // Don't do anything if the computer is making its move.
+        if (computerMoving) {
+            return
         }
 
+        // Update the state and UI.
+        state.tileClicked(row, col)
         invalidate()
+
+        // Make the computer's reply if needed.
+        computerMove()
     }
 
     // This method updates the UI.
@@ -76,8 +86,7 @@ class PlayActivity : AppCompatActivity() {
         if (!state.currentlyPlaying) {
             newGameButton.visibility = View.VISIBLE
             mainMenuButton.visibility = View.VISIBLE
-        }
-        else {
+        } else {
             newGameButton.visibility = View.INVISIBLE
             mainMenuButton.visibility = View.INVISIBLE
         }
@@ -87,8 +96,7 @@ class PlayActivity : AppCompatActivity() {
         // Set visibility of scores when in single player mode.
         if (singlePlayer) {
             setScore()
-        }
-        else {
+        } else {
             scoreTable.visibility = View.INVISIBLE
         }
 
@@ -146,13 +154,23 @@ class PlayActivity : AppCompatActivity() {
 
     private fun resetState() {
         state.reset()
-
-        // For single player mode we have already reset the computer player, now check to see if
-        // the computer moves first.
-        if (state.currentPlayer == state.computerPlayer) {
-            state.makeComputerMove()
-        }
-
         invalidate()
+
+        // If the computer goes first make its move.
+        computerMove()
+    }
+
+    private fun computerMove() {
+        if (state.currentlyPlaying && state.currentPlayer == state.computerPlayer) {
+            computerMoving = true
+            launch {
+                // A little delay for the computer to appear to think.
+                delay(500)
+                state.makeComputerMove()
+                runOnUiThread { invalidate() }
+                // Now allow user to click on tiles.
+                computerMoving = false
+            }
+        }
     }
 }
